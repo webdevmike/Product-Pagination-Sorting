@@ -1,0 +1,260 @@
+/**
+---------------------------------------------------------------
+ * Table of Contents
+ * 
+ * 1.0 - Reset & General
+ * 2.0 - Main Content
+ * 3.0 - Media Queries
+ * 		3.1 - 1220 pixels (max)
+ * 		3.2 - 1020 pixels (max)
+ * 		3.3 - 788 pixels (max)
+ *		3.4 - 570 pixels (max)
+ *		3.5 - 380 pixels (max)
+ *
+---------------------------------------------------------------
+**/
+
+
+$font-one: 'Open Sans', sans-serif;
+
+$color-blue: #004d8e;
+$color-gray: #d1d1d1;
+$color-light-gray: #e4e4e4;
+$color-dark-gray: #010101;
+
+
+@mixin border-radius($radius) {
+	border-radius: $radius;
+	-webkit-border-radius: $radius;
+	-moz-border-radius: $radius;
+	-ms-border-radius: $radius;
+	-o-border-radius: $radius;
+}
+
+@mixin box-shadow($shadow...) {
+	box-shadow: $shadow;
+	-webkit-box-shadow: $shadow;
+	-moz-box-shadow: $shadow;
+	-ms-box-shadow: $shadow;
+	-o-box-shadow: $shadow;
+}
+
+@mixin transition($property, $time) {
+	transition: $property $time;
+	-webkit-transition: $property $time;
+	-moz-transition: $property $time;
+	-ms-transition: $property $time;
+	-o-transition: $property $time;
+}
+
+@mixin background-size($size) {
+	background-size: $size;
+	-webkit-background-size: $size;
+	-moz-background-size: $size;
+	-o-background-size: $size;
+}
+
+@mixin transform($degrees) {
+	transform:rotate($degrees);
+	-webkit-transform:rotate($degrees);
+	-moz-transform:rotate($degrees);
+	-ms-transform:rotate($degrees)
+}
+
+
+/**
+---------------------------------------------------------------
+ * 1.0 - Reset & General
+---------------------------------------------------------------
+**/
+
+* {
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+}
+
+*:focus {
+	outline:0;
+}
+
+img {
+	border:none;	
+	max-width:100%;
+	height:auto;
+}
+
+iframe {
+	border:0;
+	width:100%;
+}
+
+.clear:after {
+	display:block;
+	clear:both;
+	content:"";
+}
+
+body {
+	font-size:16px;
+	font-family: $font-one;
+	-webkit-text-size-adjust:100%;
+}
+
+p {
+	padding-bottom:20px;
+	font-size: 15px;
+}
+
+.content-container {
+	width:100%;
+	max-width:1200px;
+	margin:0 auto;
+	padding:20px 0;
+	position:relative;
+	@extend .clear;
+}
+
+a {
+	color: #000000;
+	@include transition(all, .3s);
+
+	&:hover {
+		color: #999999;
+	}
+}
+
+ul {
+	list-style-type:none;
+}
+
+header, 
+nav, 
+main, 
+section, 
+article, 
+aside, 
+footer {
+	display:block
+}
+
+/**
+---------------------------------------------------------------
+ * 2.0 - Main Content
+---------------------------------------------------------------
+**/
+
+.pagination-bar {
+	background-color:#dedede;
+	margin-bottom:20px;
+}
+
+
+.item-box {
+	border:1px solid #d4d4d4;
+	padding:10px;
+
+	.image {
+		height:200px;
+		position:relative;
+
+		img {
+			position:absolute;
+			top:0;
+			right:0;
+			bottom:0;
+			left:0;
+			margin:auto;
+		}
+	}
+
+	h2.name {
+		font-size:13px;
+		font-weight:normal;
+		line-height:16px;
+		height:48px;
+		overflow:hidden;
+		margin-bottom:15px;
+
+		a {
+			color:$color-dark-gray;
+			text-decoration:none;
+
+			&:hover {
+				color:$color-blue;
+				text-decoration:underline;
+			}
+		}
+	}
+
+	.reg-price {
+		font-size:13px;
+		line-height:1;
+		margin-bottom:7px;
+	}
+
+	.sale-price {
+		color:#007a11;
+		font-size:18px;
+		font-weight:600;
+		line-height:1;
+	}
+}
+
+.section-contents {
+
+	ul.items {
+		@extend .clear;
+
+		> li {
+			float:left;
+			margin-right:10px;
+			margin-bottom:10px;
+		}
+	}
+}
+
+
+/**
+
+---------------------------------------------------------------
+ * 3.0 - Media Queries
+ *
+ * 3.1 - 1220 pixels (max)
+---------------------------------------------------------------
+**/
+
+@import 'queries-1220px';
+
+/**
+---------------------------------------------------------------
+ * 3.2 - 1020 pixels (max)
+---------------------------------------------------------------
+**/
+
+@import 'queries-1020px';
+
+/**
+---------------------------------------------------------------
+ * 3.3 - 788 pixels (max)
+---------------------------------------------------------------
+**/
+
+@import 'queries-788px';
+
+/**
+---------------------------------------------------------------
+ * 3.4 - 570 pixels (max)
+---------------------------------------------------------------
+**/
+
+@import 'queries-570px';
+
+/**
+---------------------------------------------------------------
+ * 3.5 - 380 pixels (max)
+---------------------------------------------------------------
+**/
+
+@import 'queries-380px';

@@ -1,0 +1,25 @@
+@media screen and (max-width: 788px) {
+
+	.content-container {
+		max-width:550px;
+	}
+
+}
+
+@media screen and (min-width: 789px) and (max-width:1020px) {
+
+	.section-contents {
+
+		ul.items {
+
+			> li {
+				width:184px;
+
+				&:nth-child(4n+4) {
+					margin-right:0;
+				}
+			}
+		}
+	}
+
+}

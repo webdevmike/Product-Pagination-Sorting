@@ -1,0 +1,38 @@
+@media screen and (max-width: 1020px) {
+
+	.content-container {
+		max-width:768px;
+	}
+
+}
+
+@media screen and (min-width: 1021px) {
+
+	.section-contents {
+
+		ul.items {
+
+			> li {
+
+				&:nth-child(5n+5) {
+					margin-right:0;
+				}
+			}
+		}
+	}
+
+}
+
+@media screen and (min-width: 1000px) and (max-width: 1220px) {
+
+	.section-contents {
+
+		ul.items {
+
+			> li {
+				width:192px;
+			}
+		}
+	}
+
+}
