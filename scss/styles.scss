@@ -117,12 +117,9 @@ p {
 }
 
 a {
-	color: #000000;
+	color: $color-blue;
+	cursor:pointer;
 	@include transition(all, .3s);
-
-	&:hover {
-		color: #999999;
-	}
 }
 
 ul {
@@ -139,6 +136,36 @@ footer {
 	display:block
 }
 
+button {
+
+	&.generic-btn {
+		background-color:$color-blue;
+		border:0;
+		color:#ffffff;
+		font-family: $font-one;
+		font-size:12px;
+		line-height:1;
+		padding:4px 10px;
+		cursor:pointer;
+		@include transition(all, .3s);
+
+		&:hover {
+			background-color: rgba(0,77,142,0.9);
+		}
+	}
+}
+
+select {
+	font-size: 13px;
+	height: 21px;
+	border: 1px solid #bdbdbd;
+	padding-left:5px;
+
+	option {
+		padding-left:5px;
+	}
+}
+
 /**
 ---------------------------------------------------------------
  * 2.0 - Main Content
@@ -148,12 +175,96 @@ footer {
 .pagination-bar {
 	background-color:#dedede;
 	margin-bottom:20px;
+	font-size:14px;
+	line-height:21px;
+	padding:20px 15px;
+	@extend .clear;
+
+	.item-count,
+	.pagination-controls {
+		float:left;
+	}
+
+	.item-count {
+		padding-right:90px;
+	}
+
+	.pagination-controls {
+		@extend .clear;
+
+		button.generic-btn {
+			float:left;
+
+			&.prev .fa {
+				padding-right:5px;
+			}
+
+			&.next .fa {
+				padding-left:5px;
+			}
+		}
+
+		ul.pages {
+			float:left;
+			padding:0 15px;
+			@extend .clear;
+
+			> li {
+				float:left;
+				padding:0 3px;
+
+				&:not(.dots) {
+					cursor:pointer;
+
+					&.current,
+					&:hover {
+						color:$color-blue;
+						text-decoration:underline;
+					}
+				}
+			}
+		}
+
+		.view-all {
+			float:left;
+			font-size:13px;
+			padding-left:20px;
+
+			a:hover {
+				text-decoration:underline;
+			}
+		}
+	}
+
+	.sort-by,
+	.items-per-page {
+		float:right;
+
+		label {
+			padding-right:5px;
+		}
+	}
+
+	.sort-by {
+
+		select {
+			width:150px;
+		}
+	}
+
+	.items-per-page {
+		padding-left:90px;
+
+		select {
+			width:60px;
+		}
+	}
 }
 
 
 .item-box {
 	border:1px solid #d4d4d4;
-	padding:10px;
+	padding:10px 10px 15px;
 
 	.image {
 		height:200px;
