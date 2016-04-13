@@ -4,6 +4,29 @@
 		max-width:1000px;
 	}
 
+	.pagination-bar {
+
+		.item-count {
+			padding-right:0;
+			padding-bottom:15px;
+		}
+
+		.pagination-controls {
+			clear:left;
+		}
+
+		.items-per-page {
+			padding-left:0;
+			padding-bottom:15px;
+		}
+
+		.sort-by {
+			clear:right;
+		}
+
+
+	}
+
 }
 
 

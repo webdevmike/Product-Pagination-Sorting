@@ -40,7 +40,8 @@ iframe {
   width: 100%;
 }
 
-.clear:after, .content-container:after, .pagination-bar:after, .pagination-bar .pagination-controls:after, .pagination-bar .pagination-controls ul.pages:after, .section-contents ul.items:after {
+.clear:after, .content-container:after, .pagination-bar:after, .pagination-bar .left:after,
+.pagination-bar .right:after, .pagination-bar .pagination-controls:after, .pagination-bar .pagination-controls ul.pages:after, .section-contents ul.items:after {
   display: block;
   clear: both;
   content: "";
@@ -94,7 +95,7 @@ button.generic-btn {
   border: 0;
   color: #ffffff;
   font-family: "Open Sans", sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1;
   padding: 4px 10px;
   cursor: pointer;
@@ -130,7 +131,15 @@ select option {
   margin-bottom: 20px;
   font-size: 14px;
   line-height: 21px;
-  padding: 20px 15px;
+  padding: 15px;
+}
+
+.pagination-bar .left {
+  float: left;
+}
+
+.pagination-bar .right {
+  float: right;
 }
 
 .pagination-bar .item-count,
@@ -143,7 +152,7 @@ select option {
 }
 
 .pagination-bar .pagination-controls button.generic-btn {
-  float: left;
+  display: inline-block;
 }
 
 .pagination-bar .pagination-controls button.generic-btn.prev .fa {
@@ -155,7 +164,8 @@ select option {
 }
 
 .pagination-bar .pagination-controls ul.pages {
-  float: left;
+  display: inline-block;
+  vertical-align: middle;
   padding: 0 15px;
 }
 
@@ -175,7 +185,7 @@ select option {
 }
 
 .pagination-bar .pagination-controls .view-all {
-  float: left;
+  display: inline-block;
   font-size: 13px;
   padding-left: 20px;
 }
@@ -275,6 +285,20 @@ select option {
   .content-container {
     max-width: 1000px;
   }
+  .pagination-bar .item-count {
+    padding-right: 0;
+    padding-bottom: 15px;
+  }
+  .pagination-bar .pagination-controls {
+    clear: left;
+  }
+  .pagination-bar .items-per-page {
+    padding-left: 0;
+    padding-bottom: 15px;
+  }
+  .pagination-bar .sort-by {
+    clear: right;
+  }
 }
 
 @media screen and (min-width: 1221px) {
@@ -315,6 +339,21 @@ select option {
   .content-container {
     max-width: 550px;
   }
+  .pagination-bar .left {
+    padding-bottom: 15px;
+  }
+  .pagination-bar .left,
+  .pagination-bar .right {
+    text-align: center;
+  }
+  .pagination-bar .left,
+  .pagination-bar .right,
+  .pagination-bar .item-count,
+  .pagination-bar .pagination-controls,
+  .pagination-bar .items-per-page,
+  .pagination-bar .sort-by {
+    float: none;
+  }
 }
 
 @media screen and (min-width: 789px) and (max-width: 1020px) {
@@ -334,6 +373,9 @@ select option {
 @media screen and (max-width: 570px) {
   .content-container {
     max-width: 360px;
+  }
+  .pagination-bar .pagination-controls .view-all {
+    display: none;
   }
 }
 

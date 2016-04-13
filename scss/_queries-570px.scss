@@ -4,6 +4,16 @@
 		max-width:360px;
 	}
 
+	.pagination-bar {
+
+		.pagination-controls {
+
+			.view-all {
+				display:none;
+			}
+		}
+	}
+
 }
 
 @media screen and (min-width: 571px) and (max-width:788px) {
