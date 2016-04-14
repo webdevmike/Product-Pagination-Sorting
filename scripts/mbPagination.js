@@ -10,15 +10,20 @@ var mbPagination = {};
 		settings: {
 			items: [],
 			sortedItems: [],
-			sortMethods: ['Featured', 'Name', 'Price Low to High', 'Price High to Low'],
-			sortMethod: 'Featured',
-			itemsPerPage: 24
+			sortMethods: ['Featured','Name','Price Low to High','Price High to Low'],
+			itemsPerPage: [1, 2, 3],
+			pagesWithItems: [],
+			currSortMethod: 'Featured',
+			currItemsPerPage: 1,
+			currPage: 1,
+			currRangeStart: 0,
+			currRangeEnd: 0
 		},
 		orderItems: function() {
 
 			mbPagination.settings.sortedItems = [];
 
-			switch(mbPagination.settings.sortMethod) {
+			switch(mbPagination.settings.currSortMethod) {
 				case 'Featured':
 					mbPagination.settings.sortedItems = mbPagination.settings.items;
 					break;
@@ -50,91 +55,130 @@ var mbPagination = {};
 		sortPriceHighToLow: function(a, b) {
 			return b.salePrice-a.salePrice;
 		},
-		buildItemHTML: function() {
+		buildHTML: function() {
 
-			var templateHTML = mbPagination.settings.handlebarsTemplate.find('#item-box-template').html();
+
+
+			mbPagination.buildContainers();
+
+
+
+			var templateHTML = $('#pagination-template').html();
 			var template = Handlebars.compile(templateHTML);
-			var itemHTML = '';
 			
-			mbPagination.settings.sortedItems.forEach(function(item){
-				itemHTML += template(item);
-			});
-
-			$('#quick-view-popup').html(itemHTML);
+			$('main > .content-container').html(template(mbPagination.settings));
 
 			echo.render();
 
 		},
-		buildPaginationBar: function() {
+		buildContainers: function() {
 
-			mbPagination.buildSortBy();
+			// Build Containers
+			var numOfContainers = Math.ceil(mbPagination.settings.sortedItems.length / mbPagination.settings.currItemsPerPage);
+
+			// If current page is greater than numOfContainers, reset to 1
+			if(mbPagination.settings.currPage > numOfContainers) {
+				mbPagination.settings.currPage = 1;
+			}
+
+			mbPagination.settings.pagesWithItems = [];
+
+			var rangeStart = 0;
+			var rangeEnd = mbPagination.settings.currItemsPerPage;
+
+			for(i=1; i <= numOfContainers; i++) {
+
+				var container = [];
+
+				// loop through range
+				for(r=rangeStart; r < rangeEnd; r++) {
+					var item = mbPagination.settings.sortedItems[r];
+					
+					if(item) {
+						item.uniqueID = r + 1;
+						container.push(item);
+					}
+				}
+
+				mbPagination.settings.pagesWithItems.push(container);
+
+				rangeStart = rangeStart + mbPagination.settings.currItemsPerPage;
+				rangeEnd = rangeEnd + mbPagination.settings.currItemsPerPage;
+			}
+
+			var rangeCalcArray = mbPagination.settings.pagesWithItems[mbPagination.settings.currPage - 1];
+			mbPagination.settings.currRangeStart = rangeCalcArray[0].uniqueID;
+			mbPagination.settings.currRangeEnd = rangeCalcArray[rangeCalcArray.length - 1].uniqueID;
 
 		},
-		buildSortBy: function() {
+		buildPaginationBar: function() {
 
-			var templateHTML = mbPagination.settings.handlebarsTemplate.find('#sort-by-template').html();
+			var templateHTML = $('#pagination-bar-template').html();
 			var template = Handlebars.compile(templateHTML);
 
-			$('.pagination-bar .sort-by').html(template);
+			$('.pagination-bar').html(template(mbPagination.settings));
 
 		},
 		updateResults: function(sortMethod, itemsPerPage) {
 
 			if(sortMethod) {
-				mbPagination.settings.sortMethod = sortMethod;
+				mbPagination.settings.currSortMethod = sortMethod;
 			}
 			if(itemsPerPage) {
-				mbPagination.settings.itemsPerPage = itemsPerPage;
+				mbPagination.settings.currItemsPerPage = itemsPerPage;
 			}
 
 			mbPagination.orderItems();
-			mbPagination.buildPaginationBar();
-			mbPagination.buildItemHTML();
+			mbPagination.buildHTML();
 
 		},
 		events: function() {
 
 			// sort by select
 			$(document).on('change', '.pagination-bar .sort-by select', function() {
-
 				var sortMethod = $(this).val();
 				mbPagination.updateResults(sortMethod, null);
+			})
 
+			// Items per page
+			$(document).on('change', '.pagination-bar .items-per-page select', function() {
+				var ipp = Number($(this).val());
+				mbPagination.updateResults(null, ipp);
 			})
 
 		},
 		handlebarHelpers: function() {
 
-			// helper
-			Handlebars.registerHelper('sortMethod', function() {
-				return mbPagination.settings.sortMethod;
+			Handlebars.registerHelper('sortBySelected', function(sortMethod) {
+				if(sortMethod === mbPagination.settings.currSortMethod) {
+					return " selected";
+				}
+			})
+
+			Handlebars.registerHelper('itemsPerPageSelected', function(items) {
+				if(Number(items) === Number(mbPagination.settings.currItemsPerPage)) {
+					return " selected";
+				}
+			})
+
+			Handlebars.registerHelper('currentPage', function(page) {
+				if(page === mbPagination.settings.currPage - 1) {
+					return " current";
+				}
 			})
 
 		},
 		go: function() {
 
-			// Load handlebar.js templates
-			$.ajax({
-				url: 'templates/templates.handlebars',
-				dataType: 'html',
-				cache: false,
-				success: function(data, status, response) {
+			mbPagination.handlebarHelpers();
 
-					//console.log('template loaded');
-					mbPagination.settings.handlebarsTemplate = $(data);
-
-					mbPagination.handlebarHelpers();
-
-					// lazy load
-					echo.init({
-						offsetVertical: 500
-					});
-
-					mbPagination.updateResults();
-					mbPagination.events();
-
-				}
+			// lazy load
+			echo.init({
+				offsetVertical: 500
 			});
+
+			mbPagination.updateResults();
+			mbPagination.events();
 
 		}
 	}
