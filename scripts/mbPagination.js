@@ -21,57 +21,61 @@ var mbPagination = {};
 			switch(mbPagination.settings.sortMethod) {
 				case 'Featured':
 					mbPagination.settings.sortedItems = mbPagination.settings.items;
-					console.log('featured');
 					break;
 				case 'Name':
-					console.log('name');
+					mbPagination.settings.sortedItems = mbPagination.settings.items.slice().sort(mbPagination.sortName);
 					break;
 				case 'Price Low to High':
 					mbPagination.settings.sortedItems = mbPagination.settings.items.slice().sort(mbPagination.sortPriceLowToHigh);
-					console.log('price low to high');
 					break;
 				case 'Price High to Low':
-					console.log('price high to low');
+					mbPagination.settings.sortedItems = mbPagination.settings.items.slice().sort(mbPagination.sortPriceHighToLow);
 					break;
 			}
 
 		},
+		sortName: function(a,b) {
+			var nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase();
+			//sort string ascending
+			if(nameA < nameB) {
+				return -1;
+			} else if(nameA > nameB) {
+				return 1;
+			}
+			return 0; //default return value (no sorting)
+		},
 		sortPriceLowToHigh: function(a,b) {
-			// should always sort with sale price. If no sale price is present store we will pass regular price in as sale price
 			return a.salePrice-b.salePrice;
 		},
 		sortPriceHighToLow: function(a, b) {
-			// should always sort with sale price. If no sale price is present store we will pass regular price in as sale price
 			return b.salePrice-a.salePrice;
 		},
 		buildItemHTML: function() {
 
-			$.ajax({
-				url: 'templates/item-box.handlebars',
-				dataType: 'html',
-				cache: false,
-				success: function(data, status, response) {
-
-					//console.log('template loaded');
-
-					var template = Handlebars.compile(response.responseText);
-					var itemHTML;
-					
-					mbPagination.settings.sortedItems.forEach(function(item){
-						itemHTML += template(item);
-					});
-
-					$('#quick-view-popup').html(itemHTML);
-
-				}
+			var templateHTML = mbPagination.settings.handlebarsTemplate.find('#item-box-template').html();
+			var template = Handlebars.compile(templateHTML);
+			var itemHTML = '';
+			
+			mbPagination.settings.sortedItems.forEach(function(item){
+				itemHTML += template(item);
 			});
+
+			$('#quick-view-popup').html(itemHTML);
+
+			echo.render();
 
 		},
-		showItemImages: function() {
+		buildPaginationBar: function() {
 
-			echo.init({
-				offsetVertical: 500
-			});
+			mbPagination.buildSortBy();
+
+		},
+		buildSortBy: function() {
+
+			var templateHTML = mbPagination.settings.handlebarsTemplate.find('#sort-by-template').html();
+			var template = Handlebars.compile(templateHTML);
+
+			$('.pagination-bar .sort-by').html(template);
 
 		},
 		updateResults: function(sortMethod, itemsPerPage) {
@@ -84,16 +88,53 @@ var mbPagination = {};
 			}
 
 			mbPagination.orderItems();
+			mbPagination.buildPaginationBar();
 			mbPagination.buildItemHTML();
-			mbPagination.showItemImages();
 
 		},
 		events: function() {
 
+			// sort by select
+			$(document).on('change', '.pagination-bar .sort-by select', function() {
+
+				var sortMethod = $(this).val();
+				mbPagination.updateResults(sortMethod, null);
+
+			})
+
+		},
+		handlebarHelpers: function() {
+
+			// helper
+			Handlebars.registerHelper('sortMethod', function() {
+				return mbPagination.settings.sortMethod;
+			})
+
 		},
 		go: function() {
 
-			mbPagination.updateResults();
+			// Load handlebar.js templates
+			$.ajax({
+				url: 'templates/templates.handlebars',
+				dataType: 'html',
+				cache: false,
+				success: function(data, status, response) {
+
+					//console.log('template loaded');
+					mbPagination.settings.handlebarsTemplate = $(data);
+
+					mbPagination.handlebarHelpers();
+
+					// lazy load
+					echo.init({
+						offsetVertical: 500
+					});
+
+					mbPagination.updateResults();
+					mbPagination.events();
+
+				}
+			});
 
 		}
 	}

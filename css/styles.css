@@ -105,7 +105,6 @@ button.generic-btn {
   -ms-transition: all 0.3s;
   -o-transition: all 0.3s;
 }
-
 button.generic-btn:hover {
   background-color: rgba(0, 77, 142, 0.9);
 }
@@ -116,7 +115,6 @@ select {
   border: 1px solid #bdbdbd;
   padding-left: 5px;
 }
-
 select option {
   padding-left: 5px;
 }
@@ -133,85 +131,66 @@ select option {
   line-height: 21px;
   padding: 15px;
 }
-
 .pagination-bar .left {
   float: left;
 }
-
 .pagination-bar .right {
   float: right;
 }
-
 .pagination-bar .item-count,
 .pagination-bar .pagination-controls {
   float: left;
 }
-
 .pagination-bar .item-count {
   padding-right: 90px;
 }
-
 .pagination-bar .pagination-controls button.generic-btn {
   display: inline-block;
 }
-
 .pagination-bar .pagination-controls button.generic-btn.prev .fa {
   padding-right: 5px;
 }
-
 .pagination-bar .pagination-controls button.generic-btn.next .fa {
   padding-left: 5px;
 }
-
 .pagination-bar .pagination-controls ul.pages {
   display: inline-block;
   vertical-align: middle;
   padding: 0 15px;
 }
-
 .pagination-bar .pagination-controls ul.pages > li {
   float: left;
   padding: 0 3px;
 }
-
 .pagination-bar .pagination-controls ul.pages > li:not(.dots) {
   cursor: pointer;
 }
-
-.pagination-bar .pagination-controls ul.pages > li:not(.dots).current,
-.pagination-bar .pagination-controls ul.pages > li:not(.dots):hover {
+.pagination-bar .pagination-controls ul.pages > li:not(.dots).current, .pagination-bar .pagination-controls ul.pages > li:not(.dots):hover {
   color: #004d8e;
   text-decoration: underline;
 }
-
 .pagination-bar .pagination-controls .view-all {
   display: inline-block;
   font-size: 13px;
   padding-left: 20px;
 }
-
 .pagination-bar .pagination-controls .view-all a:hover {
   text-decoration: underline;
 }
-
 .pagination-bar .sort-by,
 .pagination-bar .items-per-page {
   float: right;
 }
-
 .pagination-bar .sort-by label,
 .pagination-bar .items-per-page label {
   padding-right: 5px;
 }
-
 .pagination-bar .sort-by select {
   width: 150px;
 }
-
 .pagination-bar .items-per-page {
   padding-left: 90px;
 }
-
 .pagination-bar .items-per-page select {
   width: 60px;
 }
@@ -220,12 +199,10 @@ select option {
   border: 1px solid #d4d4d4;
   padding: 10px 10px 15px;
 }
-
 .item-box .image {
   height: 200px;
   position: relative;
 }
-
 .item-box .image img {
   position: absolute;
   top: 0;
@@ -234,7 +211,6 @@ select option {
   left: 0;
   margin: auto;
 }
-
 .item-box h2.name {
   font-size: 13px;
   font-weight: normal;
@@ -243,23 +219,19 @@ select option {
   overflow: hidden;
   margin-bottom: 15px;
 }
-
 .item-box h2.name a {
   color: #010101;
   text-decoration: none;
 }
-
 .item-box h2.name a:hover {
   color: #004d8e;
   text-decoration: underline;
 }
-
 .item-box .reg-price {
   font-size: 13px;
   line-height: 1;
   margin-bottom: 7px;
 }
-
 .item-box .sale-price {
   color: #007a11;
   font-size: 18px;
@@ -285,6 +257,7 @@ select option {
   .content-container {
     max-width: 1000px;
   }
+
   .pagination-bar .item-count {
     padding-right: 0;
     padding-bottom: 15px;
@@ -300,13 +273,11 @@ select option {
     clear: right;
   }
 }
-
 @media screen and (min-width: 1221px) {
   .section-contents ul.items > li {
     width: 232px;
   }
 }
-
 /**
 ---------------------------------------------------------------
  * 3.2 - 1020 pixels (max)
@@ -317,19 +288,16 @@ select option {
     max-width: 768px;
   }
 }
-
 @media screen and (min-width: 1021px) {
   .section-contents ul.items > li:nth-child(5n+5) {
     margin-right: 0;
   }
 }
-
 @media screen and (min-width: 1000px) and (max-width: 1220px) {
   .section-contents ul.items > li {
     width: 192px;
   }
 }
-
 /**
 ---------------------------------------------------------------
  * 3.3 - 788 pixels (max)
@@ -339,6 +307,7 @@ select option {
   .content-container {
     max-width: 550px;
   }
+
   .pagination-bar .left {
     padding-bottom: 15px;
   }
@@ -355,7 +324,6 @@ select option {
     float: none;
   }
 }
-
 @media screen and (min-width: 789px) and (max-width: 1020px) {
   .section-contents ul.items > li {
     width: 184px;
@@ -364,7 +332,6 @@ select option {
     margin-right: 0;
   }
 }
-
 /**
 ---------------------------------------------------------------
  * 3.4 - 570 pixels (max)
@@ -374,11 +341,11 @@ select option {
   .content-container {
     max-width: 360px;
   }
+
   .pagination-bar .pagination-controls .view-all {
     display: none;
   }
 }
-
 @media screen and (min-width: 571px) and (max-width: 788px) {
   .section-contents ul.items > li {
     width: 176px;
@@ -387,7 +354,6 @@ select option {
     margin-right: 0;
   }
 }
-
 /**
 ---------------------------------------------------------------
  * 3.5 - 380 pixels (max)
@@ -398,7 +364,6 @@ select option {
     min-width: 300px;
   }
 }
-
 @media screen and (max-width: 570px) {
   .section-contents ul.items > li {
     width: 49%;
@@ -409,3 +374,5 @@ select option {
     margin-right: 0;
   }
 }
+
+/*# sourceMappingURL=styles.css.map */
