@@ -329,6 +329,13 @@ select {
 
 .section-contents {
 
+	.page-container {
+
+		&.current {
+			background-color:yellow;
+		}
+	}
+
 	ul.items {
 		@extend .clear;
 

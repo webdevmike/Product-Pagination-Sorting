@@ -13,6 +13,7 @@ var mbPagination = {};
 			sortMethods: ['Featured','Name','Price Low to High','Price High to Low'],
 			itemsPerPage: [1, 2, 3],
 			pagesWithItems: [],
+			maxPageDisp: 2,
 			currSortMethod: 'Featured',
 			currItemsPerPage: 1,
 			currPage: 1,
@@ -146,6 +147,25 @@ var mbPagination = {};
 				mbPagination.updateResults(null, ipp);
 			})
 
+			// Next button
+			$(document).on('click', '.pagination-bar .pagination-controls button.next', function() {
+				mbPagination.settings.currPage++;
+				mbPagination.updateResults();
+			})
+
+			// Previous button
+			$(document).on('click', '.pagination-bar .pagination-controls button.prev', function() {
+				mbPagination.settings.currPage--;
+				mbPagination.updateResults();
+			})
+
+			// Pagination page number
+			$(document).on('click', '.pagination-bar .pagination-controls ul.pages > li:not(.dots)', function() {
+				var currPage = Number($(this).text());
+				mbPagination.settings.currPage = currPage;
+				mbPagination.updateResults();
+			});
+
 		},
 		handlebarHelpers: function() {
 
@@ -165,6 +185,40 @@ var mbPagination = {};
 				if(page === mbPagination.settings.currPage - 1) {
 					return " current";
 				}
+			})
+
+			Handlebars.registerHelper('paginationPageClasses', function(page) {
+				if(page == mbPagination.settings.currPage - 1) {
+					return "current";
+				}
+			})
+
+			Handlebars.registerHelper('paginationPage', function(page) {
+				return page + 1;
+			})
+
+			Handlebars.registerHelper('previousButton', function(block) {
+				if(mbPagination.settings.currPage > 1) {
+					return block.fn(this);
+				};
+			})
+
+			Handlebars.registerHelper('nextButton', function(block) {
+				if(mbPagination.settings.currPage !== mbPagination.settings.pagesWithItems.length) {
+					return block.fn(this);
+				};
+			})
+
+			Handlebars.registerHelper('pages', function(page, options) {
+				if((page + mbPagination.settings.currPage) > mbPagination.settings.maxPageDisp) {
+					return options.fn(this);
+				}
+			})
+
+			Handlebars.registerHelper('dotsBefore', function(page, options) {
+				/*if(mbPagination.settings.currPage === page - mbPagination.settings.maxPageDisp) {
+					return options.fn(this);
+				}*/
 			})
 
 		},

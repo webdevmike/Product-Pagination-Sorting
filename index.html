@@ -29,15 +29,25 @@
 				<div class="item-count">Showing {{currRangeStart}} - {{currRangeEnd}} of {{this.sortedItems.length}} items</div>
 
 				<div class="pagination-controls">
+
+					{{#previousButton}}
 					<button type="button" class="generic-btn prev"><i class="fa fa-caret-left"></i> Previous</button>
+					{{/previousButton}}
+
 					<ul class="pages">
-						<li>1</li>
-						<li class="current">2</li>
-						<li>3</li>
-						<li class="dots">...</li>
-						<li>10</li>
+					{{#each pagesWithItems}}
+
+						{{#pages @index}}
+							<li class="{{paginationPageClasses @index}}">{{paginationPage @index}}</li>
+						{{/pages}}
+						
+					{{/each}}
 					</ul>
+
+					{{#nextButton}}
 					<button type="button" class="generic-btn next">Next <i class="fa fa-caret-right"></i></button>
+					{{/nextButton}}
+
 					<div class="view-all"><a>View All</a></div>
 				</div>
 
