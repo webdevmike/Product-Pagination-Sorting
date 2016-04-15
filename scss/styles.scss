@@ -330,9 +330,10 @@ select {
 .section-contents {
 
 	.page-container {
+		display:none;
 
 		&.current {
-			background-color:yellow;
+			display:block;
 		}
 	}
 

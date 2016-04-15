@@ -30,25 +30,42 @@
 
 				<div class="pagination-controls">
 
-					{{#previousButton}}
-					<button type="button" class="generic-btn prev"><i class="fa fa-caret-left"></i> Previous</button>
-					{{/previousButton}}
+					{{#pagination}}
 
-					<ul class="pages">
-					{{#each pagesWithItems}}
+						{{#previousButton}}
+						<button type="button" class="generic-btn prev"><i class="fa fa-caret-left"></i> Previous</button>
+						{{/previousButton}}
 
-						{{#pages @index}}
-							<li class="{{paginationPageClasses @index}}">{{paginationPage @index}}</li>
-						{{/pages}}
-						
-					{{/each}}
-					</ul>
+						<ul class="pages">
 
-					{{#nextButton}}
-					<button type="button" class="generic-btn next">Next <i class="fa fa-caret-right"></i></button>
-					{{/nextButton}}
+							{{#firstPage}}{{/firstPage}}
 
+							{{#dotsBefore}}
+							<li class="dots">...</li>
+							{{/dotsBefore}}
+
+							{{#pages}}{{/pages}}
+
+							{{#dotsAfter}}
+							<li class="dots">...</li>
+							{{/dotsAfter}}
+
+							{{#lastPage}}{{/lastPage}}
+							
+						</ul>
+
+						{{#nextButton}}
+						<button type="button" class="generic-btn next">Next <i class="fa fa-caret-right"></i></button>
+						{{/nextButton}}
+
+					{{/pagination}}
+
+					{{#viewAll}}
+					<div class="reset"><a>Reset</a></div>
+					{{else}}
 					<div class="view-all"><a>View All</a></div>
+					{{/viewAll}}
+
 				</div>
 
 			</div>

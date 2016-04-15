@@ -13,9 +13,9 @@ var mbPagination = {};
 			sortMethods: ['Featured','Name','Price Low to High','Price High to Low'],
 			itemsPerPage: [1, 2, 3],
 			pagesWithItems: [],
-			maxPageDisp: 2,
-			currSortMethod: 'Featured',
-			currItemsPerPage: 1,
+			maxPageDisp: 2, // maximum pages to show above/below current page
+			currSortMethod: '',
+			currItemsPerPage: 0,
 			currPage: 1,
 			currRangeStart: 0,
 			currRangeEnd: 0
@@ -120,13 +120,17 @@ var mbPagination = {};
 			$('.pagination-bar').html(template(mbPagination.settings));
 
 		},
-		updateResults: function(sortMethod, itemsPerPage) {
+		updateResults: function(sortMethod, itemsPerPage, currentPage) {
 
 			if(sortMethod) {
 				mbPagination.settings.currSortMethod = sortMethod;
 			}
 			if(itemsPerPage) {
 				mbPagination.settings.currItemsPerPage = itemsPerPage;
+			}
+
+			if(currentPage) {
+				mbPagination.settings.currPage = currentPage;
 			}
 
 			mbPagination.orderItems();
@@ -138,7 +142,7 @@ var mbPagination = {};
 			// sort by select
 			$(document).on('change', '.pagination-bar .sort-by select', function() {
 				var sortMethod = $(this).val();
-				mbPagination.updateResults(sortMethod, null);
+				mbPagination.updateResults(sortMethod, null, 1);
 			})
 
 			// Items per page
@@ -166,6 +170,16 @@ var mbPagination = {};
 				mbPagination.updateResults();
 			});
 
+			// View All
+			$(document).on('click', '.pagination-bar .pagination-controls .view-all a', function() {
+				mbPagination.updateResults(null, mbPagination.settings.sortedItems.length);
+			})
+
+			// Reset
+			$(document).on('click', '.pagination-bar .pagination-controls .reset a', function() {
+				mbPagination.updateResults(null, mbPagination.settings.itemsPerPage[0]);
+			})
+
 		},
 		handlebarHelpers: function() {
 
@@ -187,38 +201,74 @@ var mbPagination = {};
 				}
 			})
 
-			Handlebars.registerHelper('paginationPageClasses', function(page) {
-				if(page == mbPagination.settings.currPage - 1) {
-					return "current";
-				}
+			Handlebars.registerHelper('pagination', function(options) {
+				if(mbPagination.settings.pagesWithItems.length > 1) {
+					return options.fn(this);
+				};
 			})
 
-			Handlebars.registerHelper('paginationPage', function(page) {
-				return page + 1;
-			})
-
-			Handlebars.registerHelper('previousButton', function(block) {
+			Handlebars.registerHelper('previousButton', function(options) {
 				if(mbPagination.settings.currPage > 1) {
-					return block.fn(this);
+					return options.fn(this);
 				};
 			})
 
-			Handlebars.registerHelper('nextButton', function(block) {
-				if(mbPagination.settings.currPage !== mbPagination.settings.pagesWithItems.length) {
-					return block.fn(this);
-				};
+			Handlebars.registerHelper('firstPage', function() {
+				var ret = '';
+				if(mbPagination.settings.currPage == 1) {
+					ret += '<li class="current">1</li>';
+				} else {
+					ret += '<li>1</li>';
+				}
+				return ret;
 			})
 
-			Handlebars.registerHelper('pages', function(page, options) {
-				if((page + mbPagination.settings.currPage) > mbPagination.settings.maxPageDisp) {
+			Handlebars.registerHelper('dotsBefore', function(options) {
+				if(mbPagination.settings.currPage > mbPagination.settings.maxPageDisp) {
 					return options.fn(this);
 				}
 			})
 
-			Handlebars.registerHelper('dotsBefore', function(page, options) {
-				/*if(mbPagination.settings.currPage === page - mbPagination.settings.maxPageDisp) {
+			Handlebars.registerHelper('pages', function() {
+				var ret = '';
+				for(i=Math.max(Number(mbPagination.settings.currPage) - mbPagination.settings.maxPageDisp + 1,2); i <= Math.min(Number(mbPagination.settings.currPage) + mbPagination.settings.maxPageDisp - 1, mbPagination.settings.pagesWithItems.length - 1); i++) {
+					if (mbPagination.settings.currPage == i) {
+						ret = ret + '<li class="current">' + i + '</li>';
+					} else {
+						ret = ret + '<li>' + i + '</li>';
+					}
+				}
+				return ret;
+			})
+
+			Handlebars.registerHelper('dotsAfter', function(options) {
+				if(mbPagination.settings.currPage < (mbPagination.settings.pagesWithItems.length - mbPagination.settings.maxPageDisp)) {
 					return options.fn(this);
-				}*/
+				}
+			})
+
+			Handlebars.registerHelper('lastPage', function() {
+				var ret = '';
+				if(mbPagination.settings.currPage == mbPagination.settings.pagesWithItems.length) {
+					ret += '<li class="current">' + mbPagination.settings.pagesWithItems.length + '</li>';
+				} else {
+					ret += '<li>' + mbPagination.settings.pagesWithItems.length + '</li>';
+				}
+				return ret;
+			})
+
+			Handlebars.registerHelper('nextButton', function(options) {
+				if(mbPagination.settings.currPage < mbPagination.settings.pagesWithItems.length) {
+					return options.fn(this);
+				};
+			})
+
+			Handlebars.registerHelper('viewAll', function(options) {
+				if(mbPagination.settings.currItemsPerPage == mbPagination.settings.sortedItems.length) {
+					return options.fn(this);
+				} else {
+					return options.inverse(this);
+				}
 			})
 
 		},
@@ -231,7 +281,7 @@ var mbPagination = {};
 				offsetVertical: 500
 			});
 
-			mbPagination.updateResults();
+			mbPagination.updateResults(mbPagination.settings.sortMethods[0], mbPagination.settings.itemsPerPage[0]);
 			mbPagination.events();
 
 		}

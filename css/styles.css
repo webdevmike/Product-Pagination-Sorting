@@ -239,8 +239,11 @@ select option {
   line-height: 1;
 }
 
+.section-contents .page-container {
+  display: none;
+}
 .section-contents .page-container.current {
-  background-color: yellow;
+  display: block;
 }
 .section-contents ul.items > li {
   float: left;
