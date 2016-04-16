@@ -147,8 +147,14 @@ select option {
 .pagination-bar .pagination-controls button.generic-btn {
   display: inline-block;
 }
+.pagination-bar .pagination-controls button.generic-btn.prev {
+  margin-right: 10px;
+}
 .pagination-bar .pagination-controls button.generic-btn.prev .fa {
   padding-right: 5px;
+}
+.pagination-bar .pagination-controls button.generic-btn.next {
+  margin-left: 10px;
 }
 .pagination-bar .pagination-controls button.generic-btn.next .fa {
   padding-left: 5px;
@@ -156,7 +162,6 @@ select option {
 .pagination-bar .pagination-controls ul.pages {
   display: inline-block;
   vertical-align: middle;
-  padding: 0 15px;
 }
 .pagination-bar .pagination-controls ul.pages > li {
   float: left;
@@ -169,13 +174,17 @@ select option {
   color: #004d8e;
   text-decoration: underline;
 }
+.pagination-bar .pagination-controls .reset,
 .pagination-bar .pagination-controls .view-all {
   display: inline-block;
   font-size: 13px;
-  padding-left: 20px;
 }
+.pagination-bar .pagination-controls .reset a:hover,
 .pagination-bar .pagination-controls .view-all a:hover {
   text-decoration: underline;
+}
+.pagination-bar .pagination-controls .view-all {
+  padding-left: 20px;
 }
 .pagination-bar .sort-by,
 .pagination-bar .items-per-page {

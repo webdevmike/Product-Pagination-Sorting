@@ -208,19 +208,28 @@ select {
 		button.generic-btn {
 			display:inline-block;
 
-			&.prev .fa {
-				padding-right:5px;
+			&.prev {
+				margin-right:10px;
+
+				.fa {
+					padding-right:5px;
+				}
+				
 			}
 
-			&.next .fa {
-				padding-left:5px;
+			&.next {
+				margin-left:10px;
+
+				.fa {
+					padding-left:5px;
+				}
+				
 			}
 		}
 
 		ul.pages {
 			display: inline-block;
 			vertical-align: middle;
-			padding:0 15px;
 			@extend .clear;
 
 			> li {
@@ -239,14 +248,18 @@ select {
 			}
 		}
 
+		.reset,
 		.view-all {
 			display:inline-block;
 			font-size:13px;
-			padding-left:20px;
 
 			a:hover {
 				text-decoration:underline;
 			}
+		}
+
+		.view-all {
+			padding-left:20px;
 		}
 	}
 

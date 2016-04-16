@@ -18,23 +18,34 @@ var mbPagination = {};
 			currItemsPerPage: 0,
 			currPage: 1,
 			currRangeStart: 0,
-			currRangeEnd: 0
+			currRangeEnd: 0,
+			selectors: {
+				paginationTemplate: '#pagination-template',
+				contentContainer: 'main > .content-container',
+				sortBySelect: '.pagination-bar .sort-by select',
+				itemsPerPageSelect: '.pagination-bar .items-per-page select',
+				nextBtn: '.pagination-bar .pagination-controls button.next',
+				prevBtn: '.pagination-bar .pagination-controls button.prev',
+				page: '.pagination-bar .pagination-controls ul.pages > li',
+				viewAll: '.pagination-bar .pagination-controls .view-all a',
+				resetViewAll: '.pagination-bar .pagination-controls .reset a'
+			}
 		},
 		orderItems: function() {
 
 			mbPagination.settings.sortedItems = [];
 
 			switch(mbPagination.settings.currSortMethod) {
-				case 'Featured':
+				case mbPagination.settings.sortMethods[0]:
 					mbPagination.settings.sortedItems = mbPagination.settings.items;
 					break;
-				case 'Name':
+				case mbPagination.settings.sortMethods[1]:
 					mbPagination.settings.sortedItems = mbPagination.settings.items.slice().sort(mbPagination.sortName);
 					break;
-				case 'Price Low to High':
+				case mbPagination.settings.sortMethods[2]:
 					mbPagination.settings.sortedItems = mbPagination.settings.items.slice().sort(mbPagination.sortPriceLowToHigh);
 					break;
-				case 'Price High to Low':
+				case mbPagination.settings.sortMethods[3]:
 					mbPagination.settings.sortedItems = mbPagination.settings.items.slice().sort(mbPagination.sortPriceHighToLow);
 					break;
 			}
@@ -48,7 +59,7 @@ var mbPagination = {};
 			} else if(nameA > nameB) {
 				return 1;
 			}
-			return 0; //default return value (no sorting)
+			return 0;
 		},
 		sortPriceLowToHigh: function(a,b) {
 			return a.salePrice-b.salePrice;
@@ -58,16 +69,12 @@ var mbPagination = {};
 		},
 		buildHTML: function() {
 
-
-
 			mbPagination.buildContainers();
 
-
-
-			var templateHTML = $('#pagination-template').html();
+			var templateHTML = $(mbPagination.settings.selectors.paginationTemplate).html();
 			var template = Handlebars.compile(templateHTML);
 			
-			$('main > .content-container').html(template(mbPagination.settings));
+			$(mbPagination.settings.selectors.contentContainer).html(template(mbPagination.settings));
 
 			echo.render();
 
@@ -112,14 +119,6 @@ var mbPagination = {};
 			mbPagination.settings.currRangeEnd = rangeCalcArray[rangeCalcArray.length - 1].uniqueID;
 
 		},
-		buildPaginationBar: function() {
-
-			var templateHTML = $('#pagination-bar-template').html();
-			var template = Handlebars.compile(templateHTML);
-
-			$('.pagination-bar').html(template(mbPagination.settings));
-
-		},
 		updateResults: function(sortMethod, itemsPerPage, currentPage) {
 
 			if(sortMethod) {
@@ -140,43 +139,43 @@ var mbPagination = {};
 		events: function() {
 
 			// sort by select
-			$(document).on('change', '.pagination-bar .sort-by select', function() {
+			$(document).on('change', mbPagination.settings.selectors.sortBySelect, function() {
 				var sortMethod = $(this).val();
 				mbPagination.updateResults(sortMethod, null, 1);
 			})
 
 			// Items per page
-			$(document).on('change', '.pagination-bar .items-per-page select', function() {
+			$(document).on('change', mbPagination.settings.selectors.itemsPerPageSelect, function() {
 				var ipp = Number($(this).val());
 				mbPagination.updateResults(null, ipp);
 			})
 
 			// Next button
-			$(document).on('click', '.pagination-bar .pagination-controls button.next', function() {
+			$(document).on('click', mbPagination.settings.selectors.nextBtn, function() {
 				mbPagination.settings.currPage++;
 				mbPagination.updateResults();
 			})
 
 			// Previous button
-			$(document).on('click', '.pagination-bar .pagination-controls button.prev', function() {
+			$(document).on('click', mbPagination.settings.selectors.prevBtn, function() {
 				mbPagination.settings.currPage--;
 				mbPagination.updateResults();
 			})
 
 			// Pagination page number
-			$(document).on('click', '.pagination-bar .pagination-controls ul.pages > li:not(.dots)', function() {
+			$(document).on('click', mbPagination.settings.selectors.page, function() {
 				var currPage = Number($(this).text());
 				mbPagination.settings.currPage = currPage;
 				mbPagination.updateResults();
 			});
 
 			// View All
-			$(document).on('click', '.pagination-bar .pagination-controls .view-all a', function() {
+			$(document).on('click', mbPagination.settings.selectors.viewAll, function() {
 				mbPagination.updateResults(null, mbPagination.settings.sortedItems.length);
 			})
 
 			// Reset
-			$(document).on('click', '.pagination-bar .pagination-controls .reset a', function() {
+			$(document).on('click', mbPagination.settings.selectors.resetViewAll, function() {
 				mbPagination.updateResults(null, mbPagination.settings.itemsPerPage[0]);
 			})
 
@@ -210,52 +209,56 @@ var mbPagination = {};
 			})
 
 			Handlebars.registerHelper('pagination', function(currentPage, totalPage, size, options) {
-				var startPage, endPage, context;
 
-				if (arguments.length === 3) {
-					options = size;
-					size = 5;
-				}
+				if(totalPage > 1) {
+					var startPage, endPage, context;
 
-				startPage = currentPage - Math.floor(size / 2);
-				endPage = currentPage + Math.floor(size / 2);
+					if (arguments.length === 3) {
+						options = size;
+						size = 5;
+					}
 
-				if (startPage <= 0) {
-					endPage -= (startPage - 1);
-					startPage = 1;
-				}
+					startPage = currentPage - Math.floor(size / 2);
+					endPage = currentPage + Math.floor(size / 2);
 
-				if (endPage > totalPage) {
-					endPage = totalPage;
-					if (endPage - size + 1 > 0) {
-						startPage = endPage - size + 1;
-					} else {
+					if (startPage <= 0) {
+						endPage -= (startPage - 1);
 						startPage = 1;
 					}
+
+					if (endPage > totalPage) {
+						endPage = totalPage;
+						if (endPage - size + 1 > 0) {
+							startPage = endPage - size + 1;
+						} else {
+							startPage = 1;
+						}
+					}
+
+					context = {
+						showPreviousBtn: false,
+						pages: [],
+						showNextBtn: false,
+					};
+
+					if(currentPage != 1) {
+						context.showPreviousBtn = true;
+					}
+
+					for (var i = startPage; i <= endPage; i++) {
+						context.pages.push({
+							page: i,
+							isCurrent: i === currentPage,
+						});
+					}
+
+					if (currentPage != totalPage) {
+						context.showNextBtn = true;
+					}
+
+					return options.fn(context);
 				}
 
-				context = {
-					showPreviousBtn: false,
-					pages: [],
-					showNextBtn: false,
-				};
-
-				if(currentPage != 1) {
-					context.showPreviousBtn = true;
-				}
-
-				for (var i = startPage; i <= endPage; i++) {
-					context.pages.push({
-						page: i,
-						isCurrent: i === currentPage,
-					});
-				}
-
-				if (currentPage != totalPage) {
-					context.showNextBtn = true;
-				}
-
-				return options.fn(context);
 			});
 
 		},
@@ -264,9 +267,7 @@ var mbPagination = {};
 			mbPagination.handlebarHelpers();
 
 			// lazy load
-			echo.init({
-				offsetVertical: 500
-			});
+			echo.init({ offsetVertical: 500 });
 
 			mbPagination.updateResults(mbPagination.settings.sortMethods[0], mbPagination.settings.itemsPerPage[0]);
 			mbPagination.events();
