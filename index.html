@@ -30,33 +30,26 @@
 
 				<div class="pagination-controls">
 
-					{{#pagination}}
+					{{#pagination this.currPage this.pagesWithItems.length this.maxPageDisp}}
 
-						{{#previousButton}}
-						<button type="button" class="generic-btn prev"><i class="fa fa-caret-left"></i> Previous</button>
-						{{/previousButton}}
+						{{#if showPreviousBtn}}
+							<button type="button" class="generic-btn prev"><i class="fa fa-caret-left"></i> Previous</button>
+						{{/if}}
 
 						<ul class="pages">
-
-							{{#firstPage}}{{/firstPage}}
-
-							{{#dotsBefore}}
-							<li class="dots">...</li>
-							{{/dotsBefore}}
-
-							{{#pages}}{{/pages}}
-
-							{{#dotsAfter}}
-							<li class="dots">...</li>
-							{{/dotsAfter}}
-
-							{{#lastPage}}{{/lastPage}}
-							
+						{{#each pages}}
+							{{#if isCurrent}}
+								<li class="current">{{page}}</li>
+							{{/if}}
+							{{#unless isCurrent}}
+								<li>{{page}}</li>
+							{{/unless}}
+						{{/each}}
 						</ul>
 
-						{{#nextButton}}
-						<button type="button" class="generic-btn next">Next <i class="fa fa-caret-right"></i></button>
-						{{/nextButton}}
+						{{#if showNextBtn}}
+							<button type="button" class="generic-btn next">Next <i class="fa fa-caret-right"></i></button>
+						{{/if}}
 
 					{{/pagination}}
 
@@ -76,7 +69,7 @@
 					<label>Items per page:</label>
 					<select>
 					{{#each itemsPerPage}}
-						<option value="{{this}}"{{itemsPerPageSelected this}}>{{this}}</option>
+						<option value="{{this}}"{{#itemsPerPageSelected this}} selected{{/itemsPerPageSelected}}>{{this}}</option>
 					{{/each}}
 					</select>
 				</div>
@@ -85,7 +78,7 @@
 					<label>Sort by:</label>
 					<select>
 					{{#each sortMethods}}
-						<option value="{{this}}"{{sortBySelected this}}>{{this}}</option>
+						<option value="{{this}}"{{#sortBySelected this}} selected{{/sortBySelected}}>{{this}}</option>
 					{{/each}}
 					</select>
 				</div>
@@ -97,7 +90,7 @@
 
 			{{#each pagesWithItems}}
 
-			<div class="page-container{{currentPage @index}}">
+				<div class="page-container{{#currentPage @index ../this.currPage}} current{{/currentPage}}">
 
 				<ul class="items">
 					{{#each this}}

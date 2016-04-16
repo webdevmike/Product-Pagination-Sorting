@@ -13,7 +13,7 @@ var mbPagination = {};
 			sortMethods: ['Featured','Name','Price Low to High','Price High to Low'],
 			itemsPerPage: [1, 2, 3],
 			pagesWithItems: [],
-			maxPageDisp: 2, // maximum pages to show above/below current page
+			maxPageDisp: 5,
 			currSortMethod: '',
 			currItemsPerPage: 0,
 			currPage: 1,
@@ -183,84 +183,22 @@ var mbPagination = {};
 		},
 		handlebarHelpers: function() {
 
-			Handlebars.registerHelper('sortBySelected', function(sortMethod) {
+			Handlebars.registerHelper('sortBySelected', function(sortMethod, options) {
 				if(sortMethod === mbPagination.settings.currSortMethod) {
-					return " selected";
+					return options.fn(this);
 				}
 			})
 
-			Handlebars.registerHelper('itemsPerPageSelected', function(items) {
+			Handlebars.registerHelper('itemsPerPageSelected', function(items, options) {
 				if(Number(items) === Number(mbPagination.settings.currItemsPerPage)) {
-					return " selected";
-				}
-			})
-
-			Handlebars.registerHelper('currentPage', function(page) {
-				if(page === mbPagination.settings.currPage - 1) {
-					return " current";
-				}
-			})
-
-			Handlebars.registerHelper('pagination', function(options) {
-				if(mbPagination.settings.pagesWithItems.length > 1) {
-					return options.fn(this);
-				};
-			})
-
-			Handlebars.registerHelper('previousButton', function(options) {
-				if(mbPagination.settings.currPage > 1) {
-					return options.fn(this);
-				};
-			})
-
-			Handlebars.registerHelper('firstPage', function() {
-				var ret = '';
-				if(mbPagination.settings.currPage == 1) {
-					ret += '<li class="current">1</li>';
-				} else {
-					ret += '<li>1</li>';
-				}
-				return ret;
-			})
-
-			Handlebars.registerHelper('dotsBefore', function(options) {
-				if(mbPagination.settings.currPage > mbPagination.settings.maxPageDisp) {
 					return options.fn(this);
 				}
 			})
 
-			Handlebars.registerHelper('pages', function() {
-				var ret = '';
-				for(i=Math.max(Number(mbPagination.settings.currPage) - mbPagination.settings.maxPageDisp + 1,2); i <= Math.min(Number(mbPagination.settings.currPage) + mbPagination.settings.maxPageDisp - 1, mbPagination.settings.pagesWithItems.length - 1); i++) {
-					if (mbPagination.settings.currPage == i) {
-						ret = ret + '<li class="current">' + i + '</li>';
-					} else {
-						ret = ret + '<li>' + i + '</li>';
-					}
-				}
-				return ret;
-			})
-
-			Handlebars.registerHelper('dotsAfter', function(options) {
-				if(mbPagination.settings.currPage < (mbPagination.settings.pagesWithItems.length - mbPagination.settings.maxPageDisp)) {
+			Handlebars.registerHelper('currentPage', function(page, currentPage, options) {
+				if(page === currentPage - 1) {
 					return options.fn(this);
 				}
-			})
-
-			Handlebars.registerHelper('lastPage', function() {
-				var ret = '';
-				if(mbPagination.settings.currPage == mbPagination.settings.pagesWithItems.length) {
-					ret += '<li class="current">' + mbPagination.settings.pagesWithItems.length + '</li>';
-				} else {
-					ret += '<li>' + mbPagination.settings.pagesWithItems.length + '</li>';
-				}
-				return ret;
-			})
-
-			Handlebars.registerHelper('nextButton', function(options) {
-				if(mbPagination.settings.currPage < mbPagination.settings.pagesWithItems.length) {
-					return options.fn(this);
-				};
 			})
 
 			Handlebars.registerHelper('viewAll', function(options) {
@@ -270,6 +208,55 @@ var mbPagination = {};
 					return options.inverse(this);
 				}
 			})
+
+			Handlebars.registerHelper('pagination', function(currentPage, totalPage, size, options) {
+				var startPage, endPage, context;
+
+				if (arguments.length === 3) {
+					options = size;
+					size = 5;
+				}
+
+				startPage = currentPage - Math.floor(size / 2);
+				endPage = currentPage + Math.floor(size / 2);
+
+				if (startPage <= 0) {
+					endPage -= (startPage - 1);
+					startPage = 1;
+				}
+
+				if (endPage > totalPage) {
+					endPage = totalPage;
+					if (endPage - size + 1 > 0) {
+						startPage = endPage - size + 1;
+					} else {
+						startPage = 1;
+					}
+				}
+
+				context = {
+					showPreviousBtn: false,
+					pages: [],
+					showNextBtn: false,
+				};
+
+				if(currentPage != 1) {
+					context.showPreviousBtn = true;
+				}
+
+				for (var i = startPage; i <= endPage; i++) {
+					context.pages.push({
+						page: i,
+						isCurrent: i === currentPage,
+					});
+				}
+
+				if (currentPage != totalPage) {
+					context.showNextBtn = true;
+				}
+
+				return options.fn(context);
+			});
 
 		},
 		go: function() {

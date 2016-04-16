@@ -2,8 +2,7 @@ mbPagination.settings.items = [{
 	id: "winter-jacket-1",
 	name: "b1 Winter Jacket",
 	image: "images/placeholder-image.png",
-	price: 179.99,
-	salePrice: 3
+	salePrice: 3,
 },
 {
 	id: "winter-jacket-2",
@@ -60,4 +59,4 @@ mbPagination.settings.items = [{
 	image: "images/placeholder-image.png",
 	price: 179.99,
 	salePrice: 2
-}]
+},]
