@@ -62,10 +62,44 @@ var mbPagination = {};
 			return 0;
 		},
 		sortPriceLowToHigh: function(a,b) {
-			return a.salePrice-b.salePrice;
+			var priceA;
+			var priceB;
+			if(mbPagination.checkPrice(a.salePrice)) {
+				priceA = a.salePrice;
+			} else if(mbPagination.checkPrice(a.price)) {
+				priceA = a.price;
+			}
+			if(mbPagination.checkPrice(b.salePrice)) {
+				priceB = b.salePrice;
+			} else if(mbPagination.checkPrice(b.price)) {
+				priceB = b.price;
+			}
+			return priceA - priceB;
 		},
 		sortPriceHighToLow: function(a, b) {
-			return b.salePrice-a.salePrice;
+			var priceA;
+			var priceB;
+			if(mbPagination.checkPrice(a.salePrice)) {
+				priceA = a.salePrice;
+			} else if(mbPagination.checkPrice(a.price)) {
+				priceA = a.price;
+			}
+			if(mbPagination.checkPrice(b.salePrice)) {
+				priceB = b.salePrice;
+			} else if(mbPagination.checkPrice(b.price)) {
+				priceB = b.price;
+			}
+			return priceB - priceA;
+		},
+		checkPrice: function(number) {
+			if($.isNumeric(number)) {
+				return number;
+			} else {
+				return false;
+			}
+		},
+		formatPrice: function(number) {
+			return (Math.round(100 * number) / 100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		},
 		buildHTML: function() {
 
@@ -206,6 +240,28 @@ var mbPagination = {};
 				} else {
 					return options.inverse(this);
 				}
+			})
+
+			Handlebars.registerHelper('itemPriceAndSale', function(price, salePrice, options) {
+				if(mbPagination.checkPrice(price) && mbPagination.checkPrice(salePrice)) {
+					return options.fn(this);
+				}
+			})
+
+			Handlebars.registerHelper('itemPriceNoSale', function(price, salePrice, options) {
+				if(mbPagination.checkPrice(price) && !mbPagination.checkPrice(salePrice)) {
+					return options.fn(this);
+				}
+			})
+
+			Handlebars.registerHelper('itemSaleNoPrice', function(price, salePrice, options) {
+				if(!mbPagination.checkPrice(price) && mbPagination.checkPrice(salePrice)) {
+					return options.fn(this);
+				}
+			})
+
+			Handlebars.registerHelper('formatPrice', function(price, options) {
+				return mbPagination.formatPrice(price);
 			})
 
 			Handlebars.registerHelper('pagination', function(currentPage, totalPage, size, options) {

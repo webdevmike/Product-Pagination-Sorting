@@ -100,8 +100,18 @@
 								<a href="{{id}}.html"><img src="images/lazy-load-spinner.gif" data-echo="{{image}}" alt="{{name}}"></a>
 							</div>
 							<h2 class="name"><a href="{{id}}.html">{{name}}</a></h2>
-							<div class="reg-price">MSRP: <span>${{price}}</span></div>
-							<div class="sale-price">Sale: ${{salePrice}}</div>
+							{{#itemPriceAndSale price salePrice}}
+								<div class="reg-price">MSRP: ${{#formatPrice price}}{{/formatPrice}}</div>
+								<div class="sale-price">Sale: ${{#formatPrice salePrice}}{{/formatPrice}}</div>
+							{{/itemPriceAndSale}}
+							{{#itemPriceNoSale price salePrice}}
+								<div class="reg-price">MSRP: n/a</div>
+								<div class="sale-price">Price: ${{#formatPrice price}}{{/formatPrice}}</div>
+							{{/itemPriceNoSale}}
+							{{#itemSaleNoPrice price salePrice}}
+								<div class="reg-price">MSRP: n/a</div>
+								<div class="sale-price">Sale: ${{#formatPrice salePrice}}{{/formatPrice}}</div>
+							{{/itemSaleNoPrice}}
 						</div>
 					</li>
 					{{/each}}
