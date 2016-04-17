@@ -206,10 +206,11 @@ select option {
 
 .item-box {
   border: 1px solid #d4d4d4;
-  padding: 10px 10px 15px;
+  padding: 10px 10px 20px;
 }
 .item-box .image {
   height: 200px;
+  margin-bottom: 15px;
   position: relative;
 }
 .item-box .image img {
@@ -221,11 +222,9 @@ select option {
   margin: auto;
 }
 .item-box h2.name {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: normal;
-  line-height: 16px;
-  height: 48px;
-  overflow: hidden;
+  line-height: 1;
   margin-bottom: 15px;
 }
 .item-box h2.name a {

@@ -11,7 +11,7 @@ var mbPagination = {};
 			items: [],
 			sortedItems: [],
 			sortMethods: ['Featured','Name','Price Low to High','Price High to Low'],
-			itemsPerPage: [1, 2, 3],
+			itemsPerPage: [24, 36, 48],
 			pagesWithItems: [],
 			maxPageDisp: 5,
 			currSortMethod: '',
