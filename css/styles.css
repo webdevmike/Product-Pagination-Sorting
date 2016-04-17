@@ -272,6 +272,10 @@ select option {
     max-width: 1000px;
   }
 
+  .item-box .image {
+    height: 160px;
+  }
+
   .pagination-bar .item-count {
     padding-right: 0;
     padding-bottom: 15px;
